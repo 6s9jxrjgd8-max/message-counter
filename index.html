@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOS | Message Counter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #5865F2; /* Discord Blue */
+            --danger: #ff4757;
+            --bg: #050505;
+            --surface: #111111;
+            --border: #222222;
+            --text-main: #ffffff;
+            --text-dim: #888888;
+        }
+
+        * { box-sizing: border-box; cursor: crosshair; }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Top Progress */
+        #scroll-path {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 6px;
+            background: #000;
+            z-index: 100;
+        }
+        #scroll-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        .wrapper {
+            max-width: 900px;
+            margin: 100px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            border-left: 8px solid var(--accent);
+            padding-left: 25px;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 0.9;
+        }
+
+        .bot-tag {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--accent);
+            padding: 4px 12px;
+            font-size: 1rem;
+            border-radius: 4px;
+            vertical-align: middle;
+        }
+
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            position: relative;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .section:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .section-num {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+
+        p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .warning {
+            border-left: 4px solid var(--danger);
+            background: rgba(255, 71, 87, 0.05);
+            padding: 15px;
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 100px 0;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .section { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="scroll-path"><div id="scroll-bar"></div></div>
+
+    <div class="wrapper">
+        <header>
+            <h1>MESSAGE COUNTER <span class="bot-tag">BOT</span></h1>
+            <p style="color: var(--accent); margin-top: 10px; font-weight: bold;">TERMS OF SERVICE // VER 2.0</p>
+        </header>
+
+        <div class="grid">
+            <!-- Section 1 -->
+            <div class="section">
+                <span class="section-num">01.</span>
+                <h2>Data Collection</h2>
+                <p>By adding Message Counter, you permit the bot to index message metadata (ID, timestamp, author) for the sole purpose of ranking and statistics. We do <span style="color: white;">NOT</span> store the actual content of your messages. We only care about the numbers.</p>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="section">
+                <span class="section-num">02.</span>
+                <h2>Usage Limits</h2>
+                <p>Don't try to break the bot. Spamming commands to inflate your numbers or attempting to bypass rate limits will result in a global blacklist. Play fair, stay on the leaderboard.</p>
+                <div class="warning">VIOLATION RESULTS IN AN IMMEDIATE PERMANENT BAN.</div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="section">
+                <span class="section-num">03.</span>
+                <h2>Privacy Rights</h2>
+                <p>Your data, your choice. Server admins can reset server-wide stats, and individual users can request a data wipe by leaving the server or using the <code style="color: var(--accent);">/opt-out</code> command. We respect the grind, but we respect privacy more.</p>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="section">
+                <span class="section-num">04.</span>
+                <h2>Service Stability</h2>
+                <p>Message Counter is provided "as-is." While we aim for 24/7 uptime, we are not liable for data loss due to Discord API outages or server migrations. Stats are precious, but they aren't legal currency.</p>
+            </div>
+        </div>
+
+        <footer>
+            [ END OF TRANSMISSION ]<br>
+            © 2026 MESSAGE COUNTER DEV TEAM
+        </footer>
+    </div>
+
+    <script>
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("scroll-bar").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>
